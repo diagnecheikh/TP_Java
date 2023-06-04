@@ -14,17 +14,14 @@ import java.util.ResourceBundle;
 public class HelloController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        idTab.setCellValueFactory(new PropertyValueFactory<Film, String>("nom"));
+
+        idTab.setCellValueFactory(new PropertyValueFactory<Film, String>("id"));
         rangTab.setCellValueFactory(new PropertyValueFactory<Film, Integer>("rang"));
-        nomFilmTab.setCellValueFactory(new PropertyValueFactory<Film, String>("id"));
+        nomFilmTab.setCellValueFactory(new PropertyValueFactory<Film, String>("nom"));
         anneeSortieTab.setCellValueFactory(new PropertyValueFactory<Film, Integer>("annee"));
 
-        ajouterFimDansTableau(8, "dryf", "fgcjf", 1695);
-
-
-
     }
-     public void ajouterFimDansTableau(Integer rang, String id, String nom, Integer annee){
+     public void ajouterFilmDansTableau(Integer rang, String id, String nom, Integer annee){
 
          Film film = new Film();
          film.setId(id);
@@ -36,18 +33,6 @@ public class HelloController implements Initializable {
          films.add(film);
          tab.setItems(films);
      }
-    public void supprimerFimDansTableau(Integer rang, String id, String nom, Integer annee){
-
-        Film delete = new Film();
-        delete.setId(id);
-        delete.setRang(rang);
-        delete.setNom(nom);
-        delete.setAnnee(annee);
-
-        ObservableList<Film> films = tab.getItems();
-        films.clear();
-        tab.setItems(films);
-    }
 
     @FXML
     private TableView tab;
@@ -90,17 +75,16 @@ public class HelloController implements Initializable {
         String nom = txF3.getText();
         Integer annee = Integer.parseInt(txF4.getText());
 
-        ajouterFimDansTableau(rang, id, nom, annee);
+        ajouterFilmDansTableau(rang, id, nom, annee);
 
     }
     @FXML
-    private void viderFilm(){
-        Integer rang = Integer.parseInt(rangTab.getText());
-        String id = idTab.getText();
-        String nom = nomFilmTab.getText();
-        Integer annee = Integer.parseInt(anneeSortieTab.getText());
-
-        supprimerFimDansTableau(rang,id,nom,annee);
+    private void viderFilm() {
+        Film filmSelectionne = (Film) tab.getSelectionModel().getSelectedItem();
+        if (filmSelectionne != null) {
+            ObservableList<Film> films = tab.getItems();
+            films.remove(filmSelectionne);
+            tab.setItems(films);
+        }
     }
-
 }

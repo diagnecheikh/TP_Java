@@ -33,11 +33,11 @@ public class Film {
         this.id = id;
     }
 
-    public int getAnnee() {
+    public Integer getAnnee() {
         return annee;
     }
 
-    public void setAnnee(int annee) {
+    public void setAnnee(Integer annee) {
         this.annee = annee;
     }
 }
