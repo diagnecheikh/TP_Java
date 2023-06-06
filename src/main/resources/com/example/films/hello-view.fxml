@@ -57,4 +57,6 @@
    </AnchorPane>
    <Button fx:id="btnAjouter" mnemonicParsing="false" onAction="#ajouterFilm" text="Ajouter" />
    <Button fx:id="bntVider" mnemonicParsing="false" onAction="#viderFilm" text="Vider" />
+    <Button fx:id="btnCharger" text="Charger" onAction="#chargerDonnees" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
 </VBox>

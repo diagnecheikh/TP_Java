@@ -10,6 +10,11 @@ import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import javafx.scene.control.Button;
+
 
 public class HelloController implements Initializable {
     @Override
@@ -33,6 +38,46 @@ public class HelloController implements Initializable {
          films.add(film);
          tab.setItems(films);
      }
+
+    public void chargerDonneesDepuisCSV(String fichierCSV) {
+        String ligne;
+        String separateur = ","; // Séparateur utilisé pour séparer les colonnes
+
+        try (BufferedReader br = new BufferedReader(new FileReader(fichierCSV))) {
+
+            // Lire la ligne d'en-tête
+            String entete = br.readLine();
+            String[] colonnes = entete.split(separateur);
+
+            // Vérifier si les colonnes correspondent aux noms attendus
+            if (colonnes.length == 4 && colonnes[0].equals("rang") && colonnes[1].equals("id") &&
+                    colonnes[2].equals("nom") && colonnes[3].equals("annee")) {
+
+                while ((ligne = br.readLine()) != null) {
+                    String[] donnees = ligne.split(separateur);
+
+                    // Vérifier si le tableau de données contient suffisamment d'éléments
+                    if (donnees.length == 4) {
+                        // Extraire les données nécessaires du tableau "donnees"
+                        Integer rang = Integer.parseInt(donnees[0]);
+                        String id = donnees[1];
+                        String nom = donnees[2];
+                        Integer annee = Integer.parseInt(donnees[3]);
+
+                        // Appeler la méthode ajouterFilmDansTableau pour ajouter les données à la table
+                        ajouterFilmDansTableau(rang, id, nom, annee);
+                    } else {
+                        System.out.println("Données incorrectes dans la ligne du fichier CSV : " + ligne);
+                    }
+                }
+            } else {
+                System.out.println("En-tête du fichier CSV incorrecte : " + entete);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     private TableView tab;
@@ -69,6 +114,9 @@ public class HelloController implements Initializable {
     @FXML
     private Button bntVider;
     @FXML
+    private Button btnCharger;
+
+    @FXML
     private void ajouterFilm(){
         Integer rang = Integer.parseInt(txF.getText());
         String id = txF2.getText();
@@ -86,5 +134,10 @@ public class HelloController implements Initializable {
             films.remove(filmSelectionne);
             tab.setItems(films);
         }
+    }
+    @FXML
+    private void chargerDonnees() {
+        String fichierCSV = "src/main/java/com/example/films/fichier.csv";
+        chargerDonneesDepuisCSV(fichierCSV);
     }
 }
